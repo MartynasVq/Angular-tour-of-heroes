@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Hero} from '../hero';
 import { HeroService } from "../hero.service";
 import {MessageService} from "../message.service";
+import {applySourceSpanToExpressionIfNeeded} from "@angular/compiler/src/output/output_ast";
 
 @Component({
   selector: 'app-heroes',
@@ -15,16 +16,23 @@ export class HeroesComponent implements OnInit {
   ngOnInit(): void {
     this.getHeroes();
   }
-  selectedHero?: Hero;
+
   heroes: Hero[] = [];
 
   getHeroes(): void {
     this.heroService.getHeroes().subscribe(heroes => this.heroes = heroes);
   }
 
-  onSelect(hero: Hero): void {
-    this.selectedHero = hero;
-    this.messageService.add(`HeroesComponent: Selected hero id=${hero.id}`);
 
+  add(name: string): void {
+    name = name.trim();
+    if(!name) return;
+    this.heroService.addHero({name} as Hero)
+      .subscribe(hero => this.heroes.push(hero));
+  }
+
+  delete(hero: Hero): void {
+    this.heroes = this.heroes.filter(h => h != hero);
+    this.heroService.delete(hero.id).subscribe();
   }
 }
