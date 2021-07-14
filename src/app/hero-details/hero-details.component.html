@@ -5,6 +5,7 @@
     <label for="hero-name">Hero Name:</label>
     <input id="hero-name" [(ngModel)]="hero.name" placeholder="New name">
   </div>
+  <div><span>Power: {{hero.power ? hero.power : 'none'}}</span></div>
 </div>
 <button (click)="save()">save</button>
 <button (click)="goBack()">go back</button>
